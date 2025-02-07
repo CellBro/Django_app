@@ -59,7 +59,7 @@ class Player extends AcGameObject {
         let vx = Math.cos(angle),vy = Math.sin(angle);
         let color = "orange";
         let speed = this.playground.height * 0.5;
-        let move_length = this.playground.height * 1.5;
+        let move_length = this.playground.height * 1;
         new FireBall(this.playground,this,x,y,radius,vx,vy,color,speed,move_length);
         
 

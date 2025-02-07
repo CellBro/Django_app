@@ -205,7 +205,7 @@ class Player extends AcGameObject {
         let vx = Math.cos(angle),vy = Math.sin(angle);
         let color = "orange";
         let speed = this.playground.height * 0.5;
-        let move_length = this.playground.height * 1.5;
+        let move_length = this.playground.height * 1;
         new FireBall(this.playground,this,x,y,radius,vx,vy,color,speed,move_length);
         
 
@@ -322,6 +322,9 @@ class AcGamePlayground{
         this.game_map= new GameMap(this);
         this.players=[];
         this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,"white",this.height*0.15,true));
+        for(let i=0;i<5;i++){
+            this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,"blue",this.height*0.15,false))
+        }
         this.start();
 
 
