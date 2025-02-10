@@ -133,9 +133,10 @@ class Player extends AcGameObject {
         else
         {
   
-            if(!this.is_me&&this.silent_time>2&&Math.random()< 1/200.0)
+            if(!this.is_me&&this.silent_time>2&&Math.random()< 1/400.0)
             {
                 let player = this.playground.players[0];
+               
                 this.shoot_fireball(player.x,player.y);
 
             }
@@ -175,6 +176,13 @@ class Player extends AcGameObject {
 
     }
 
+    on_destroy(){
+        for(let i=0 ; i < this.playground.players.length ; i++)
+            if(this.playground.players[i] == this)
+            {
+                this.playground.players.splice(i,1);
+            }
+    }
 
 
 
