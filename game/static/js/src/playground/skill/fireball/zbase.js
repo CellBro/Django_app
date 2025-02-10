@@ -41,7 +41,6 @@ class FireBall extends AcGameObject{
         }
 
         this.render();
-
     }
     get_dist(x1,y1,x2,y2){
         let dx = x1-x2;
@@ -51,6 +50,7 @@ class FireBall extends AcGameObject{
 
     is_collision(player){
         let distance = this.get_dist(this.x,this.y,player.x,player.y)
+        if(player.radius < 10) return false;
         if(distance < this.radius + player.radius)
             return true;
         return false;

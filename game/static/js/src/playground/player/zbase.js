@@ -88,6 +88,7 @@ class Player extends AcGameObject {
     }
 
     is_attacked(angle,damage){
+   
         for(let i=0 ; i< 10 + Math.random()*5;i++ )
         {
             let x = this.x;
@@ -103,14 +104,16 @@ class Player extends AcGameObject {
         }
 
         this.radius -=damage;
-        if(this.radius < 15){
+        if(this.radius < 10){
             this.destroy();
             return false;
         }
+
         this.damage_x = Math.cos(angle);
         this.damage_y = Math.sin(angle);
         this.damage_speed = damage*100;
         this.speed *=1.8;
+
     }
 
     update(){
