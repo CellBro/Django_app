@@ -19,6 +19,8 @@ class Player extends AcGameObject {
         this.friction = 0.9;
         this.cur_skill = null;
 
+        this.silent_time = 0.0;
+
 
     }
 
@@ -45,6 +47,7 @@ class Player extends AcGameObject {
             }else if(e.which === 1){
                 if(outer.cur_skill === "fireball")
                 {
+                   if(outer.radius > 10)
                     outer.shoot_fireball(e.clientX,e.clientY);
 
                 }
@@ -56,6 +59,7 @@ class Player extends AcGameObject {
         $(window).keydown(function(e){
             if(e.which === 81 ) //q
             {
+               
                 outer.cur_skill = "fireball";
                 return false;
             }
@@ -117,6 +121,8 @@ class Player extends AcGameObject {
     }
 
     update(){
+        this.silent_time += this.timedelta/1000
+
         if(this.damage_speed > this.eps){
             this.vx = this.vy = 0;
             this.move_length = 0;
@@ -126,6 +132,15 @@ class Player extends AcGameObject {
         }
         else
         {
+  
+            if(!this.is_me&&this.silent_time>2&&Math.random()< 1/200.0)
+            {
+                let player = this.playground.players[0];
+                this.shoot_fireball(player.x,player.y);
+
+            }
+
+
             if(this.move_length < this.eps)
             {
                 this.move_length =0;
@@ -135,6 +150,7 @@ class Player extends AcGameObject {
                     let tx = Math.random() * this.playground.width;
                     let ty = Math.random() * this.playground.height;
                     this.move_to(tx,ty);
+
 
                 }
             }
