@@ -18,6 +18,7 @@ class AcGameMenu{
             </div>
         </div>
          `);
+        this.$menu.hide();
         this.root.$ac_game.append(this.$menu);
         this.$single_mode = this.$menu.find('.ac-game-menu-field-item-single-mode');
         this.$multi_mode = this.$menu.find('.ac-game-menu-field-item-multi-mode');
@@ -471,16 +472,8 @@ class AcGamePlayground{
 
 
         `);
-       // this.hide();
-        this.root.$ac_game.append(this.$playground);
-        this.width =this.$playground.width();
-        this.height=this.$playground.height();
-        this.game_map= new GameMap(this);
-        this.players=[];
-        this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,"white",this.height*0.15,true));
-        for(let i=0;i<5;i++){
-            this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,this.get_random_color(),this.height*0.15,false))
-        }
+        this.hide();
+
         this.start();
 
 
@@ -496,6 +489,15 @@ class AcGamePlayground{
 
     show(){
         this.$playground.show();
+        this.root.$ac_game.append(this.$playground);
+        this.width =this.$playground.width();
+        this.height=this.$playground.height();
+        this.game_map= new GameMap(this);
+        this.players=[];
+        this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,"white",this.height*0.15,true));
+        for(let i=0;i<5;i++){
+            this.players.push(new Player(this,this.width/2,this.height/2,this.height*0.05,this.get_random_color(),this.height*0.15,false))
+        }
 
 
     }
@@ -509,10 +511,61 @@ class AcGamePlayground{
 }
 
 
+class Settings
+{
+	constructor(root){
+		this.root=root;
+		this.platform = "WEB";
+		if(this.root.AcWingOS)
+			this.platform = "ACAPP";
+		this.start();
+
+	}
+    register(){
+    }
+
+    login(){
+    }
+
+	getinfo(){
+        let outer = this;
+		$.ajax({
+			url:"https://app6069.acapp.acwing.com.cn/settings/getinfo/",
+			type:"GET",
+			data:{
+				platform: outer.platform,
+			},
+            success: function(resp){
+                console.log(resp);
+                if(resp.result === "success")
+                {
+                    outer.hide();
+                    outer.root.menu.show();
+                }
+                else
+                {
+                    outer.login();
+
+                }
+            }
+		}
+		);
+	}
+        hide(){}
+        show(){}
+        start(){
+            this.getinfo();
+        }
+
+
+
+}
 export class AcGame {
-        constructor(id){
+        constructor(id,AcWingOS){
             this.id=id;
             this.$ac_game = $('#'+id);
+            this.AcWingOS = AcWingOS;
+            this.settings = new Settings(this);
             this.menu=new AcGameMenu(this);
             this.playground=new AcGamePlayground(this);
             this.start();
