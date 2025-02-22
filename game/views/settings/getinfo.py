@@ -13,7 +13,7 @@ def getinfo_web(request): # 在网页端时的getinfo
     user=request.user
     if not user.is_authenticated:
          return JsonResponse({
-            'result':"not login",
+            'result':"未登录",
             })
     else:
         player = Player.objects.all()[0]
