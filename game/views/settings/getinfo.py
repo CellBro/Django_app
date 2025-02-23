@@ -16,7 +16,7 @@ def getinfo_web(request): # 在网页端时的getinfo
             'result':"未登录",
             })
     else:
-        player = Player.objects.all()[0]
+        player = Player.objects.get(user=user)
         return JsonResponse({ # 返回Json
             'result': "success",
             'username': player.user.username,

@@ -13,7 +13,7 @@ class AcGameMenu{
                  </div>
                  <br>
                  <div class="ac-game-menu-field-item ac-game-menu-field-item-settings">
-                 设置
+                 退出
                  </div>
             </div>
         </div>
@@ -40,6 +40,7 @@ class AcGameMenu{
         });
         this.$settings.click(function(){
             console.log("Click Settings Mode");
+            outer.root.settings.logout_on_remote();
 
         });
     }
@@ -735,10 +736,43 @@ class Settings
     }
 
     logout_on_remote(){
+        if(this.platform==="ACAPP") return false;
+        $.ajax({
+            url:"https://app6069.acapp.acwing.com.cn/settings/logout/",
+            type:"GET",
+            data:{
 
+            },
+            success:function(resp){
+                console.log(resp);
+                location.reload();
+                 
+            }
+        });
     }
 
     register_on_remote(){
+        let outer =this;
+        let username = this.$register_username.val();
+        let password = this.$register_password.val();
+        let password_confirm = this.$register_password_confirm.val();
+        this.$register_error_message.empty();
+        $.ajax({
+            url:"https://app6069.acapp.acwing.com.cn/settings/register/",
+            type:"GET",
+            data:{
+                username:username,
+                password:password,
+                password_confirm:password_confirm,
+            },
+            success:function(resp){
+                if(resp.result === "success")
+                    location.reload();
+                else{
+                    outer.$register_error_message.html(resp.result);
+                }
+            }
+        });
     }
 
 
