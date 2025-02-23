@@ -651,7 +651,6 @@ class Settings
         this.$login_password = this.$login.find(".ac-game-settings-password input");
         this.$login_submit = this.$login.find(".ac-game-settings-submit button");
         this.$login_error_message = this.$login.find(".ac-game-settings-error-message");
-
         this.$login_register = this.$login.find(".ac-game-settings-option");
         this.$login.hide();
 
@@ -661,10 +660,10 @@ class Settings
         this.$register_password_confirm = this.$register.find(".ac-game-settings-password-second input");
         this.$register_submit = this.$register.find(".ac-game-settings-submit button");
         this.$register_error_message = this.$register.find(".ac-game-settings-error-message");
-
         this.$register_login = this.$register.find(".ac-game-settings-option");
-
         this.$register.hide();
+
+        this.$acwing_login = this.$settings.find(".ac-game-settings-acwing img");
         this.root.$ac_game.append(this.$settings);
 		this.start();
 
@@ -677,6 +676,19 @@ class Settings
     login(){
         this.$register.hide();
         this.$login.show();
+    }
+    acwing_login(){
+        console.log("Click AcWing login");
+        $.ajax({
+            url:"https://app6069.acapp.acwing.com.cn/settings/acwing/web/apply_code",
+            type:"GET",
+            success:function(resp){
+                console.log(resp);
+                if(resp.result === "success"){
+                    window.location.replace(resp.apply_code_url);
+                }
+            }
+    });
     }
 
     add_listening_events_login(){
@@ -698,10 +710,17 @@ class Settings
             outer.register_on_remote();
         });
     }
+    add_listening_events_acwing_login() {
+        let outer = this;
+        this.$acwing_login.click(function(){
+            outer.acwing_login();
+        });
+    }
 
     add_listening_events(){
         this.add_listening_events_register();
         this.add_listening_events_login();
+        this.add_listening_events_acwing_login();
 
     }
 
