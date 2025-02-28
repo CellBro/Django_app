@@ -66,7 +66,17 @@ class AcGameObject{
         AC_GAME_OBJECTS.push(this);
         this.has_called_start =false;
         this.timedelta =0 ; //距离上一帧的时间间隔
+        this.uuid = this.create_uuid();
     }
+    create_uuid(){
+        let res = "" ;
+        for (let i=0;i<16;i++){
+            let x = parseInt(Math.floor(Math.random()*10));
+            res+=x;
+        }
+        return res;
+    }
+
     start()
     {
 
@@ -509,8 +519,10 @@ class MultiPlayerSocket{
     start(){
     }
     send_create_player(){
+        let outer = this;
         this.ws.send(JSON.stringify({
-            'message':"Hello acapp server",
+            'event':"create_player",
+            'uuid':outer.uuid,
         }));
     }
 
@@ -573,6 +585,8 @@ class AcGamePlayground{
         }
         }else if (mode === "multi mode"){
             this.mps = new MultiPlayerSocket(this);
+            this.mps.uuid = this.players[0].uuid;
+
             this.mps.ws.onopen = function(){
                 outer.mps.send_create_player();
             };

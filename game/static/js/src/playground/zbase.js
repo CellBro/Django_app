@@ -56,6 +56,8 @@ class AcGamePlayground{
         }
         }else if (mode === "multi mode"){
             this.mps = new MultiPlayerSocket(this);
+            this.mps.uuid = this.players[0].uuid;
+
             this.mps.ws.onopen = function(){
                 outer.mps.send_create_player();
             };
