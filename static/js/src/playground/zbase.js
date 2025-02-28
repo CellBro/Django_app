@@ -36,6 +36,7 @@ class AcGamePlayground{
     }
 
     show(mode){
+        let outer = this;
         this.$playground.show();
 
 
@@ -54,6 +55,10 @@ class AcGamePlayground{
         this.players.push(new Player(this,this.width/this.scale/2.0,0.5,0.05,this.get_random_color(),0.15,"robot"));
         }
         }else if (mode === "multi mode"){
+            this.mps = new MultiPlayerSocket(this);
+            this.mps.ws.onopen = function(){
+                outer.mps.send_create_player();
+            };
 
         }
 
