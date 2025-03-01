@@ -49,7 +49,6 @@ class MultiPlayerSocket{
             photo,
         );
         player.uuid = uuid;
-        console.log(uuid);
         this.playground.players.push(player);
     }
 

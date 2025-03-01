@@ -1,6 +1,5 @@
 class Player extends AcGameObject {
     constructor(playground,x,y,radius,color,speed,character,username,photo){
-        console.log(character,username,photo);
         super();
         this.x = x;
         this.y = y;
