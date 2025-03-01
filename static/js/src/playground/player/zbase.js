@@ -1,5 +1,6 @@
 class Player extends AcGameObject {
     constructor(playground,x,y,radius,color,speed,character,username,photo){
+        console.log(character,username,photo);
         super();
         this.x = x;
         this.y = y;
@@ -35,7 +36,7 @@ class Player extends AcGameObject {
         if(this.character === "me")
         {
             this.add_listening_events();
-        }else
+        }else if (this.character === "robot")
         {
             let tx = Math.random() * this.playground.width/this.playground.scale;
             let ty = Math.random() * this.playground.height/this.playground.scale;

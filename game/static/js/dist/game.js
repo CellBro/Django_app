@@ -212,6 +212,7 @@ class Particle extends AcGameObject {
 }
 class Player extends AcGameObject {
     constructor(playground,x,y,radius,color,speed,character,username,photo){
+        console.log(character,username,photo);
         super();
         this.x = x;
         this.y = y;
@@ -247,7 +248,7 @@ class Player extends AcGameObject {
         if(this.character === "me")
         {
             this.add_listening_events();
-        }else
+        }else if (this.character === "robot")
         {
             let tx = Math.random() * this.playground.width/this.playground.scale;
             let ty = Math.random() * this.playground.height/this.playground.scale;
@@ -517,13 +518,51 @@ class MultiPlayerSocket{
 
     }
     start(){
+        this.receive();
     }
-    send_create_player(){
+
+
+
+
+    receive(){ //从前端接收后端的信息
+        let outer = this;
+        this.ws.onmessage = function(e){
+            let data = JSON.parse(e.data);
+            let uuid = data.uuid;
+            if(uuid === outer.uuid) return false;
+            let event = data.event;
+            if(event === "create_player"){
+                outer.receive_create_player(uuid,data.username,data.photo);
+            }
+        };
+    }
+
+    send_create_player(username,photo){
         let outer = this;
         this.ws.send(JSON.stringify({
             'event':"create_player",
             'uuid':outer.uuid,
+            'username':username,
+            'photo':photo,
         }));
+    }
+
+    receive_create_player(uuid,username,photo){
+
+        let player = new Player(
+            this.playground,
+            this.playground.width/2/this.playground.scale,
+            0.5,
+            0.05,
+            "white",
+            0.15,
+            "enemy",
+            username,
+            photo,
+        );
+        player.uuid = uuid;
+        console.log(uuid);
+        this.playground.players.push(player);
     }
 
 }
@@ -588,7 +627,7 @@ class AcGamePlayground{
             this.mps.uuid = this.players[0].uuid;
 
             this.mps.ws.onopen = function(){
-                outer.mps.send_create_player();
+                outer.mps.send_create_player(outer.root.settings.username,outer.root.settings.photo);
             };
 
         }
