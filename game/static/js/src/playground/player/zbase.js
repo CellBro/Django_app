@@ -34,6 +34,8 @@ class Player extends AcGameObject {
     }
 
     start(){
+        this.playground.player_count++;
+        this.playground.notice_board.write("已就绪:"+this.playground.player_count + "人");
         if(this.character === "me")
         {
             this.add_listening_events();

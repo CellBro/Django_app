@@ -161,6 +161,34 @@ class GameMap extends AcGameObject {
 
 
 }
+class NoticeBoard extends AcGameObject{
+    constructor(playground){
+        super();
+
+        this.playground = playground;
+        this.ctx = this.playground.game_map.ctx;
+        this.text = "已就绪：0人";
+
+    }
+
+    start(){
+    }
+
+    write(text){
+        this.text = text;
+    }
+
+    update(){
+        this.render();
+
+    }
+    render(){
+        this.ctx.font = "20px serif";
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(this.text, this.playground.width/2, 20);
+    }
+}
 class Particle extends AcGameObject {
     constructor(playground,x,y,radius,vx,vy,color,speed,move_length){
         super();
@@ -246,6 +274,8 @@ class Player extends AcGameObject {
     }
 
     start(){
+        this.playground.player_count++;
+        this.playground.notice_board.write("已就绪:"+this.playground.player_count + "人");
         if(this.character === "me")
         {
             this.add_listening_events();
@@ -744,10 +774,13 @@ class AcGamePlayground{
         this.$playground.show();
 
         this.mode=mode;
+        this.state = "waiting"; //waiting -> fighting -> over
 
         this.width =this.$playground.width();
         this.height=this.$playground.height();
         this.game_map= new GameMap(this);
+        this.notice_board = new NoticeBoard(this);
+        this.player_count = 0;
 
         this.resize();
 

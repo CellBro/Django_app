@@ -31,7 +31,8 @@ class MultiPlayer(AsyncWebsocketConsumer):
 
         if not cache.has_key(self.room_name):
             cache.set(self.room_name,[],3600) #有效期1小时
-        
+
+        #给自己添加
         for player in cache.get(self.room_name):
             await self.send(text_data=json.dumps({
                 'event':"create_player",
@@ -43,15 +44,15 @@ class MultiPlayer(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(self.room_name, self.channel_name)
 
 
-
         players = cache.get(self.room_name)
         players.append({
             'uuid':data['uuid'],
             'username':data['username'],
             'photo':data['photo'],
             })
+
         cache.set(self.room_name,players,3600) #有效期1小时
-        
+        # 让别人添加自己
         await self.channel_layer.group_send(
                 self.room_name,
                 {
@@ -89,8 +90,8 @@ class MultiPlayer(AsyncWebsocketConsumer):
                     'ty':data['ty'],
                     'ball_uuid':data['ball_uuid'],
 
-                    }
-                )
+                    })
+
     async def attack(self,data):
         await self.channel_layer.group_send(
                 self.room_name,
@@ -110,18 +111,6 @@ class MultiPlayer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         data = json.loads(text_data)
         event = data['event']
-        if not cache.has_key(self.room_name):
-            cache.set(self.room_name,[],3600) #有效期1小时
-        
-        for player in cache.get(self.room_name):
-            await self.send(text_data=json.dumps({
-                'event':"create_player",
-                'uuid':player['uuid'],
-                'username':player['username'],
-                'photo':player['photo'],
-                }))
-
-        await self.channel_layer.group_add(self.room_name, self.channel_name)
 
         if event == "create_player":
             await self.create_player(data)
