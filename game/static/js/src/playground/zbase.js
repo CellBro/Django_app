@@ -39,6 +39,7 @@ class AcGamePlayground{
         let outer = this;
         this.$playground.show();
 
+        this.mode=mode;
 
         this.width =this.$playground.width();
         this.height=this.$playground.height();
@@ -50,11 +51,11 @@ class AcGamePlayground{
 
         this.players.push(new Player(this,this.width/this.scale/2.0,0.5,0.05,"white",0.15,"me",this.root.settings.username,this.root.settings.photo));
 
-        if(mode === "single mode"){
+        if(mode === "single_mode"){
         for(let i=0;i<5;i++){
         this.players.push(new Player(this,this.width/this.scale/2.0,0.5,0.05,this.get_random_color(),0.15,"robot"));
         }
-        }else if (mode === "multi mode"){
+        }else if (mode === "multi_mode"){
             this.mps = new MultiPlayerSocket(this);
             this.mps.uuid = this.players[0].uuid;
 

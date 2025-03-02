@@ -32,11 +32,11 @@ class AcGameMenu{
         let outer=this;
         this.$single_mode.click(function(){
             outer.hide();
-            outer.root.playground.show("single mode");
+            outer.root.playground.show("single_mode");
         });
         this.$multi_mode.click(function(){
             outer.hide();
-            outer.root.playground.show("multi mode");
+            outer.root.playground.show("multi_mode");
 
         });
         this.$settings.click(function(){
