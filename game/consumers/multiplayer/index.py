@@ -17,9 +17,10 @@ class MultiPlayer(AsyncWebsocketConsumer):
         self.room_name = None
 
         start = 0
+        '''
         if data['username'] != 'yjq':
             start = 10
-
+        '''
         for i in range(start,1000):
             name = "room-%d" %(i)
             if not cache.has_key(name) or len(cache.get(name)) < settings.ROOM_CAPACITY:
@@ -107,6 +108,17 @@ class MultiPlayer(AsyncWebsocketConsumer):
                     'ball_uuid':data['ball_uuid'],
                     }
                 )
+    async def blink(self,data):
+        await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type':"group_send_event",
+                    'event':"blink",
+                    'uuid':data['uuid'],
+                    'tx':data['tx'],
+                    'ty':data['ty'],
+                    }
+                )
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -120,4 +132,6 @@ class MultiPlayer(AsyncWebsocketConsumer):
             await self.shoot_fireball(data)
         elif event == "attack":
             await self.attack(data)
+        elif event == "blink":
+            await self.blink(data)
         print(data)
